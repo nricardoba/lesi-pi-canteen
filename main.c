@@ -1,432 +1,449 @@
 /**
  * @file main.c
  * @author Ricardo Araújo (a21150@alunos.ipca.pt)
- * @brief projeto de gestão de senhas e funcionarios
+ * @brief Meal ticket and employee management project
  * @version 0.2
  * @date 24-12-2024
- * 
+ *
  * @copyright Copyright (c) 2024
- * 
+ *
  */
 
-#include "profunc.h"
+#include "helpers.h"
 
 int main() {
-    dados_func func[TAM_FUNC];
-    dados_ementa ementa[TAM_EMENTA];
-    dados_senha senha[TAM_SENHA];
-    int qnt_func = 0, qnt_ementa = 0, qnt_senha = 0;
-    int op, op_aux;
-    bool term = false, term_aux;
+    employee_data employees[MAX_EMPLOYEES];
+    menu_entry menus[MAX_MENU_ENTRIES];
+    meal_ticket tickets[MAX_MEAL_TICKETS];
+    int employee_count = 0, menu_count = 0, ticket_count = 0;
+    int option, submenu_option;
+    bool finished = false, submenu_finished;
 
-    while (!term) {
-        term_aux = false;
-        op = menu();
+    while (!finished) {
+        submenu_finished = false;
+        option = main_menu();
 
-        if (op == 1) {
-            while (!term_aux) {
-                op_aux = menu_func();
-                switch (op_aux) {
-                    case 1:
-                        qnt_func = ler_file_func(func, qnt_func);
-                        break;
-                    case 2:
-                        guardar_file_func(func, qnt_func);
-                        break;
-                    case 3:
-                        qnt_func = introduzir_func(func, qnt_func);
-                        break;
-                    case 4:
-                        listar_func(func, qnt_func);
-                        break;
-                    default:
-                        term_aux = true;
+        if (option == 1) {
+            while (!submenu_finished) {
+                submenu_option = employee_menu();
+                switch (submenu_option) {
+                case 1:
+                    employee_count = load_employees(employees, employee_count);
+                    break;
+                case 2:
+                    save_employees(employees, employee_count);
+                    break;
+                case 3:
+                    employee_count = add_employee(employees, employee_count);
+                    break;
+                case 4:
+                    list_employees(employees, employee_count);
+                    break;
+                default:
+                    submenu_finished = true;
                 }
-                if (op_aux != 0) pausar();
+                if (submenu_option != 0)
+                    pause_screen();
             }
-        }
-        else if (op == 2) {
-            while (!term_aux) {
-                op_aux = menu_ementa();
-                switch (op_aux) {
-                    case 1:
-                        qnt_ementa = ler_file_ementa(ementa, qnt_ementa);
-                        break;
-                    case 2:
-                        guardar_file_ementa(ementa, qnt_ementa);
-                        break;
-                    case 3:
-                        qnt_ementa = introduzir_ementa(ementa, qnt_ementa);
-                        break;
-                    case 4:
-                        listar_ementa(ementa, qnt_ementa);
-                        break;
-                    default:
-                        term_aux = true;
+        } else if (option == 2) {
+            while (!submenu_finished) {
+                submenu_option = weekly_menu();
+                switch (submenu_option) {
+                case 1:
+                    menu_count = load_menus(menus, menu_count);
+                    break;
+                case 2:
+                    save_menus(menus, menu_count);
+                    break;
+                case 3:
+                    menu_count = add_menu(menus, menu_count);
+                    break;
+                case 4:
+                    list_menus(menus, menu_count);
+                    break;
+                default:
+                    submenu_finished = true;
                 }
-                if (op_aux != 0) pausar();
+                if (submenu_option != 0)
+                    pause_screen();
             }
-        }
-        else if (op == 3) {
-            while (!term_aux) {
-                op_aux = menu_senha();
-                switch (op_aux) {
-                    case 1:
-                        qnt_ementa = ler_file_ementa(ementa, qnt_ementa);
-                        break;
-                    case 2:
-                        guardar_file_ementa(ementa, qnt_ementa);
-                        break;
-                    case 3:
-                        qnt_ementa = introduzir_ementa(ementa, qnt_ementa);
-                        break;
-                    case 4:
-                        listar_ementa(ementa, qnt_ementa);
-                        break;
-                    default:
-                        term_aux = true;
+        } else if (option == 3) {
+            while (!submenu_finished) {
+                submenu_option = meal_ticket_menu();
+                switch (submenu_option) {
+                case 1:
+                    menu_count = load_menus(menus, menu_count);
+                    break;
+                case 2:
+                    save_menus(menus, menu_count);
+                    break;
+                case 3:
+                    menu_count = add_menu(menus, menu_count);
+                    break;
+                case 4:
+                    list_menus(menus, menu_count);
+                    break;
+                default:
+                    submenu_finished = true;
                 }
-                if (op_aux != 0) pausar();
+                if (submenu_option != 0)
+                    pause_screen();
             }
+        } else {
+            printf("Program terminated!\n\n");
+            finished = true;
         }
-        else {
-            printf("programa terminado!\n\n");
-            term = true;
-        }
-        
     }
 
     return 0;
 }
 
-int menu() {
-    int op;
+int main_menu() {
+    int option;
     bool match = false;
 
     while (!match) {
         system("clear");
         printf("M E N U\n");
 
-        printf(" 1 - Funcionarios\n");
-        printf(" 2 - Ementas\n");
-        printf(" 3 - Senhas\n");
-        printf(" 0 - Sair\n");
+        printf(" 1 - Employees\n");
+        printf(" 2 - Menus\n");
+        printf(" 3 - Meal tickets\n");
+        printf(" 0 - Exit\n");
 
-        printf(" opção: ");
-        scanf("%d", &op);
+        printf(" Option: ");
+        scanf("%d", &option);
         printf("\n");
 
-        if (op >= 0 && op <= 3) match = true;
+        if (option >= 0 && option <= 3)
+            match = true;
         else {
-            printf("operacao invalida");
-            pausar();
+            printf("Invalid operation");
+            pause_screen();
         }
     }
 
-    return op;
+    return option;
 }
-int menu_func() {
-    int op;
+int employee_menu() {
+    int option;
     bool match = false;
 
     while (!match) {
         system("clear");
-        printf("FUNCIONARIOS\n");
+        printf("EMPLOYEES\n");
 
-        printf(" 1 - Ler dados dos funcionarios do ficheiro\n");
-        printf(" 2 - Guardar dados dos funcionarios no ficheiro\n");
-        printf(" 3 - Introduzir funcionario\n");
-        printf(" 4 - Listar todos os funcionarios\n");
-        printf(" 0 - Voltar atras\n");
+        printf(" 1 - Load employee data from file\n");
+        printf(" 2 - Save employee data to file\n");
+        printf(" 3 - Add employee\n");
+        printf(" 4 - List all employees\n");
+        printf(" 0 - Go back\n");
 
-        printf(" opção: ");
-        scanf("%d", &op);
+        printf(" Option: ");
+        scanf("%d", &option);
         printf("\n");
 
-        if (op >= 0 && op <= 4) match = true;
+        if (option >= 0 && option <= 4)
+            match = true;
         else {
-            printf("operacao invalida");
-            pausar();
+            printf("Invalid operation");
+            pause_screen();
         }
     }
 
-    return op;
+    return option;
 }
-int menu_ementa() {
-    int op;
+int weekly_menu() {
+    int option;
     bool match = false;
 
     while (!match) {
         system("clear");
-        printf("EMENTAS\n");
+        printf("MENUS\n");
 
-        printf(" 1 - Ler dados das ementas do ficheiro\n");
-        printf(" 2 - Guardar dados das ementas no ficheiro\n");
-        printf(" 3 - Introduzir ementa\n");
-        printf(" 4 - Listar todas as ementas\n");
-        printf(" 0 - Voltar atras\n");
+        printf(" 1 - Load menu data from file\n");
+        printf(" 2 - Save menu data to file\n");
+        printf(" 3 - Add menu\n");
+        printf(" 4 - List all menus\n");
+        printf(" 0 - Go back\n");
 
-        printf(" opção: ");
-        scanf("%d", &op);
+        printf(" Option: ");
+        scanf("%d", &option);
         printf("\n");
 
-        if (op >= 0 && op <= 4) match = true;
+        if (option >= 0 && option <= 4)
+            match = true;
         else {
-            printf("operacao invalida");
-            pausar();
+            printf("Invalid operation");
+            pause_screen();
         }
     }
 
-    return op;
+    return option;
 }
-int menu_senha() {
-    int op;
+int meal_ticket_menu() {
+    int option;
     bool match = false;
 
     while (!match) {
         system("clear");
-        printf("SENHAS\n");
+        printf("MEAL TICKETS\n");
 
-        printf(" 1 - Ler dados das senhas do ficheiro\n");
-        printf(" 2 - Guardar dados das senhas no ficheiro\n");
-        printf(" 3 - Introduzir senha\n");
-        printf(" 4 - Listar todas as senhas\n");
-        printf(" 0 - Voltar atras\n");
+        printf(" 1 - Load meal ticket data from file\n");
+        printf(" 2 - Save meal ticket data to file\n");
+        printf(" 3 - Add meal ticket\n");
+        printf(" 4 - List all meal tickets\n");
+        printf(" 0 - Go back\n");
 
-        printf(" opção: ");
-        scanf("%d", &op);
+        printf(" Option: ");
+        scanf("%d", &option);
         printf("\n");
 
-        if (op >= 0 && op <= 4) match = true;
+        if (option >= 0 && option <= 4)
+            match = true;
         else {
-            printf("operacao invalida");
-            pausar();
+            printf("Invalid operation");
+            pause_screen();
         }
     }
 
-    return op;
+    return option;
 }
 
-// FUNCIONARIOS
-int ler_file_func(dados_func func[TAM_FUNC], int qnt_func) {
+// EMPLOYEES
+int load_employees(employee_data employees[MAX_EMPLOYEES], int employee_count) {
     FILE *fp;
-    fp = fopen("funcionarios.txt", "rt");
+    fp = fopen("employees.txt", "rt");
 
     bool match = false;
     if (fp != NULL) {
         do {
-            if (qnt_func < TAM_FUNC) {
-                fscanf(fp, "%d;%[^;];%d;%d\n",
-                &func[qnt_func].id, func[qnt_func].nome,
-                &func[qnt_func].nif, &func[qnt_func].telefone);
-                if (!existe_func(func, qnt_func, func[qnt_func].id)) qnt_func++;
-                else match = true;
+            if (employee_count < MAX_EMPLOYEES) {
+                fscanf(fp, "%d;%[^;];%d;%d\n", &employees[employee_count].id,
+                       employees[employee_count].name,
+                       &employees[employee_count].tax_id,
+                       &employees[employee_count].phone_number);
+                if (!employee_exists(employees, employee_count,
+                                     employees[employee_count].id))
+                    employee_count++;
+                else
+                    match = true;
             }
         } while (!feof(fp));
         fclose(fp);
     }
 
-    if (!match) printf("dados lidos com sucesso!");
-    else printf("ERRO: não é possivel repetir o ID");
+    if (!match)
+        printf("Data loaded successfully!");
+    else
+        printf("ERROR: Duplicate IDs are not allowed");
 
-    return qnt_func;
+    return employee_count;
 }
-void guardar_file_func(dados_func func[TAM_FUNC], int qnt_func) {
+void save_employees(employee_data employees[MAX_EMPLOYEES],
+                    int employee_count) {
     FILE *fp;
-    fp = fopen("funcionarios.txt", "wt");
+    fp = fopen("employees.txt", "wt");
 
     if (fp != NULL) {
-        for (int i = 0; i < qnt_func; i++) {
-            fprintf(fp, "%d;%s;%d;%d\n",
-            func[i].id, func[i].nome,
-            func[i].nif, func[i].telefone);
+        for (int i = 0; i < employee_count; i++) {
+            fprintf(fp, "%d;%s;%d;%d\n", employees[i].id, employees[i].name,
+                    employees[i].tax_id, employees[i].phone_number);
         }
         fclose(fp);
     }
 
-    printf("dados guardados!");
+    printf("Data saved!");
 }
-int introduzir_func(dados_func func[TAM_FUNC], int qnt_func) {
-    if (qnt_func < TAM_FUNC) {
-        func[qnt_func].id = lerInteiro("ID: ");
-        if (!existe_func(func, qnt_func, func[qnt_func].id)) {
-            lerString("Nome: ", func[qnt_func].nome);
-            func[qnt_func].nif = lerInteiro("NIF: ");
-            func[qnt_func].telefone = lerInteiro("Telefone: ");
-            qnt_func++;
-        }
-        else printf("\nERRO: não é possivel repetir o ID!");
-    }
-    else printf("Limite maximo de funcionarios atingido!");
+int add_employee(employee_data employees[MAX_EMPLOYEES], int employee_count) {
+    if (employee_count < MAX_EMPLOYEES) {
+        employees[employee_count].id = read_integer("ID: ");
+        if (!employee_exists(employees, employee_count,
+                             employees[employee_count].id)) {
+            read_string("Name: ", employees[employee_count].name);
+            employees[employee_count].tax_id = read_integer("Tax ID: ");
+            employees[employee_count].phone_number = read_integer("Phone: ");
+            employee_count++;
+        } else
+            printf("\nERROR: Duplicate IDs are not allowed!");
+    } else
+        printf("Maximum number of employees reached!");
 
-    return qnt_func;
+    return employee_count;
 }
-void listar_func(dados_func func[TAM_FUNC], int qnt_func) {
-    if (qnt_func <= 0) {
-        printf("ainda sem funcionarios!");
+void list_employees(employee_data employees[MAX_EMPLOYEES],
+                    int employee_count) {
+    if (employee_count <= 0) {
+        printf("No employees yet!");
         return;
     }
 
-    int spc[3] = { 5, 25, 12 };
-    int bar[3] = { 1, 1, 2 };
-    int rep = 0;
+    int widths[3] = {5, 25, 12};
+    int column_counts[3] = {1, 1, 2};
+    int separator_width = 0;
 
     for (int i = 0; i < 3; i++)
-        rep += ((spc[i] + 2) * bar[i]) + bar[i];
-    rep--;
+        separator_width +=
+            ((widths[i] + 2) * column_counts[i]) + column_counts[i];
+    separator_width--;
 
-    int p1, p2, p3;
-    char str[12];
+    int first_part, second_part, third_part;
+    char buffer[12];
 
-    sep(rep);
-    printf("| %-*s ", spc[0], "ID");
-    printf("| %-*s ", spc[1], "Nome");
-    printf("| %-*s ", spc[2], "NIF");
-    printf("| %-*s |\n", spc[2], "Telefone");
-    sep(rep);
-    for (int i = 0; i < qnt_func; i++) {
-        printf("| %*d ", spc[0], func[i].id);
-        printf("| %-*s ", spc[1], func[i].nome);
+    print_separator(separator_width);
+    printf("| %-*s ", widths[0], "ID");
+    printf("| %-*s ", widths[1], "Name");
+    printf("| %-*s ", widths[2], "Tax ID");
+    printf("| %-*s |\n", widths[2], "Phone");
+    print_separator(separator_width);
+    for (int i = 0; i < employee_count; i++) {
+        printf("| %*d ", widths[0], employees[i].id);
+        printf("| %-*s ", widths[1], employees[i].name);
 
-        p1 = func[i].nif / 1000000;
-        p2 = (func[i].nif / 1000) % 1000;
-        p3 = func[i].nif % 1000;
-        snprintf(str, sizeof(str), "%d %d %d", p1, p2, p3);
-        printf("| %*s ", spc[2], str);
+        first_part = employees[i].tax_id / 1000000;
+        second_part = (employees[i].tax_id / 1000) % 1000;
+        third_part = employees[i].tax_id % 1000;
+        snprintf(buffer, sizeof(buffer), "%d %d %d", first_part, second_part,
+                 third_part);
+        printf("| %*s ", widths[2], buffer);
 
-        p1 = func[i].telefone / 1000000;
-        p2 = (func[i].telefone / 1000) % 1000;
-        p3 = func[i].telefone % 1000;
-        snprintf(str, sizeof(str), "%d %d %d", p1, p2, p3);
-        printf("| %*s |\n", spc[2], str);
+        first_part = employees[i].phone_number / 1000000;
+        second_part = (employees[i].phone_number / 1000) % 1000;
+        third_part = employees[i].phone_number % 1000;
+        snprintf(buffer, sizeof(buffer), "%d %d %d", first_part, second_part,
+                 third_part);
+        printf("| %*s |\n", widths[2], buffer);
     }
-    sep(rep);
+    print_separator(separator_width);
 }
 
-// EMENTAS
-int ler_file_ementa(dados_ementa ementa[TAM_EMENTA], int qnt_ementa) {
+// MENUS
+int load_menus(menu_entry menus[MAX_MENU_ENTRIES], int menu_count) {
     FILE *fp;
-    fp = fopen("ementas.txt", "rt");
+    fp = fopen("menus.txt", "rt");
 
-    qnt_ementa = 0;
+    menu_count = 0;
     if (fp != NULL) {
         do {
-            if (qnt_ementa < TAM_EMENTA) {
-                fscanf(fp, "%[^;];%d.%d.%d;%[^;];%d;%[^;];%d;%[^;];%d;%[^;];%d\n",
-                ementa[qnt_ementa].dia_semana,
-                &ementa[qnt_ementa].dia, &ementa[qnt_ementa].mes, &ementa[qnt_ementa].ano,
-                ementa[qnt_ementa].peixe, &ementa[qnt_ementa].peixe_cal,
-                ementa[qnt_ementa].carne, &ementa[qnt_ementa].carne_cal,
-                ementa[qnt_ementa].dieta, &ementa[qnt_ementa].dieta_cal,
-                ementa[qnt_ementa].vegetariano, &ementa[qnt_ementa].vegetariano_cal);
-                qnt_ementa++;
+            if (menu_count < MAX_MENU_ENTRIES) {
+                fscanf(fp,
+                       "%[^;];%d.%d.%d;%[^;];%d;%[^;];%d;%[^;];%d;%[^;];%d\n",
+                       menus[menu_count].day_of_week, &menus[menu_count].day,
+                       &menus[menu_count].month, &menus[menu_count].year,
+                       menus[menu_count].fish, &menus[menu_count].fish_calories,
+                       menus[menu_count].meat, &menus[menu_count].meat_calories,
+                       menus[menu_count].diet, &menus[menu_count].diet_calories,
+                       menus[menu_count].vegetarian,
+                       &menus[menu_count].vegetarian_calories);
+                menu_count++;
             }
         } while (!feof(fp));
         fclose(fp);
     }
 
-    printf("dados lidos com sucesso!");
+    printf("Data loaded successfully!");
 
-    return qnt_ementa;
+    return menu_count;
 }
-void guardar_file_ementa(dados_ementa ementa[TAM_EMENTA], int qnt_ementa) {
+void save_menus(menu_entry menus[MAX_MENU_ENTRIES], int menu_count) {
     FILE *fp;
-    fp = fopen("ementas.txt", "wt");
+    fp = fopen("menus.txt", "wt");
 
     if (fp != NULL) {
-        for (int i = 0; i < qnt_ementa; i++) {
+        for (int i = 0; i < menu_count; i++) {
             fprintf(fp, "%s;%d.%d.%d;%s;%d;%s;%d;%s;%d;%s;%d\n",
-            ementa[i].dia_semana,
-            ementa[i].dia, ementa[i].mes, ementa[i].ano,
-            ementa[i].peixe, ementa[i].peixe_cal,
-            ementa[i].carne, ementa[i].carne_cal,
-            ementa[i].dieta, ementa[i].dieta_cal,
-            ementa[i].vegetariano, ementa[i].vegetariano_cal);
+                    menus[i].day_of_week, menus[i].day, menus[i].month,
+                    menus[i].year, menus[i].fish, menus[i].fish_calories,
+                    menus[i].meat, menus[i].meat_calories, menus[i].diet,
+                    menus[i].diet_calories, menus[i].vegetarian,
+                    menus[i].vegetarian_calories);
         }
         fclose(fp);
     }
 
-    printf("dados guardados!");
+    printf("Data saved!");
 }
-int introduzir_ementa(dados_ementa ementa[TAM_EMENTA], int qnt_ementa) {
-    if (qnt_ementa < TAM_EMENTA) {
-        int dmes[TAM_EMENTA] = { 6, 7, 8, 9, 10, 11, 12 };
-        char dsem[TAM_EMENTA][QTC] = {
-            "2feira", "3feira", "4feira", "5feira", "6feira", "sabado", "domingo"
-        };
+int add_menu(menu_entry menus[MAX_MENU_ENTRIES], int menu_count) {
+    if (menu_count < MAX_MENU_ENTRIES) {
+        int month_days[MAX_MENU_ENTRIES] = {6, 7, 8, 9, 10, 11, 12};
+        char weekdays[MAX_MENU_ENTRIES][MAX_TEXT_LENGTH] = {
+            "Monday", "Tuesday",  "Wednesday", "Thursday",
+            "Friday", "Saturday", "Sunday"};
 
-        strcpy(ementa[qnt_ementa].dia_semana, dsem[qnt_ementa]);
-        printf("%s ", ementa[qnt_ementa].dia_semana);
+        strcpy(menus[menu_count].day_of_week, weekdays[menu_count]);
+        printf("%s ", menus[menu_count].day_of_week);
 
-        ementa[qnt_ementa].dia = dmes[qnt_ementa];
-        ementa[qnt_ementa].mes = 1;
-        ementa[qnt_ementa].ano = 2025;
-        printf("( %d.%d.%d )\n", ementa[qnt_ementa].dia,
-        ementa[qnt_ementa].mes, ementa[qnt_ementa].ano);
+        menus[menu_count].day = month_days[menu_count];
+        menus[menu_count].month = 1;
+        menus[menu_count].year = 2025;
+        printf("( %d.%d.%d )\n", menus[menu_count].day, menus[menu_count].month,
+               menus[menu_count].year);
 
-        lerString("\n  prato peixe: ", ementa[qnt_ementa].peixe);
-        ementa[qnt_ementa].peixe_cal = lerInteiro("  calorias: ");
+        read_string("\n  Fish dish: ", menus[menu_count].fish);
+        menus[menu_count].fish_calories = read_integer("  Calories: ");
 
-        lerString("\n  prato carne: ", ementa[qnt_ementa].carne);
-        ementa[qnt_ementa].carne_cal = lerInteiro("  calorias: ");
+        read_string("\n  Meat dish: ", menus[menu_count].meat);
+        menus[menu_count].meat_calories = read_integer("  Calories: ");
 
-        lerString("\n  prato dieta: ", ementa[qnt_ementa].dieta);
-        ementa[qnt_ementa].dieta_cal = lerInteiro("  calorias: ");
+        read_string("\n  Diet dish: ", menus[menu_count].diet);
+        menus[menu_count].diet_calories = read_integer("  Calories: ");
 
-        lerString("\n  prato vegetariano: ", ementa[qnt_ementa].vegetariano);
-        ementa[qnt_ementa].vegetariano_cal = lerInteiro("  calorias: ");
+        read_string("\n  Vegetarian dish: ", menus[menu_count].vegetarian);
+        menus[menu_count].vegetarian_calories = read_integer("  Calories: ");
 
-        qnt_ementa++;
-    }
-    else printf("Ementas para a semana completas!");
+        menu_count++;
+    } else
+        printf("The weekly menus are complete!");
 
-    return qnt_ementa;
+    return menu_count;
 }
-void listar_ementa(dados_ementa ementa[TAM_EMENTA], int qnt_ementa) {
-    if (qnt_ementa <= 0) {
-        printf("ainda sem ementas para a semana!");
+void list_menus(menu_entry menus[MAX_MENU_ENTRIES], int menu_count) {
+    if (menu_count <= 0) {
+        printf("No menus for the week yet!");
         return;
     }
 
-    int spc[3] = { 10, 19, 5 };
-    int bar[3] = { 2, 4, 4 };
-    int rep = 0;
+    int widths[3] = {10, 19, 5};
+    int column_counts[3] = {2, 4, 4};
+    int separator_width = 0;
 
     for (int i = 0; i < 3; i++)
-        rep += ((spc[i] + 2) * bar[i]) + bar[i];
-    rep--;
+        separator_width +=
+            ((widths[i] + 2) * column_counts[i]) + column_counts[i];
+    separator_width--;
 
-    char str[12];
+    char buffer[12];
 
-    sep(rep);
-    printf("| %-*s ", spc[0], "dia semana");
-    printf("| %-*s ", spc[0], "dia");
-    printf("| %-*s ", spc[1], "peixe");
-    printf("| %-*s ", spc[2], "cal");
-    printf("| %-*s ", spc[1], "carne");
-    printf("| %-*s ", spc[2], "cal");
-    printf("| %-*s ", spc[1], "dieta");
-    printf("| %-*s ", spc[2], "cal");
-    printf("| %-*s ", spc[1], "vegetariano");
-    printf("| %-*s |\n", spc[2], "cal");
-    sep(rep);
-    for (int i = 0; i < qnt_ementa; i++) {
-        printf("| %-*s ", spc[0], ementa[i].dia_semana);
+    print_separator(separator_width);
+    printf("| %-*s ", widths[0], "Weekday");
+    printf("| %-*s ", widths[0], "Date");
+    printf("| %-*s ", widths[1], "Fish");
+    printf("| %-*s ", widths[2], "cal");
+    printf("| %-*s ", widths[1], "Meat");
+    printf("| %-*s ", widths[2], "cal");
+    printf("| %-*s ", widths[1], "Diet");
+    printf("| %-*s ", widths[2], "cal");
+    printf("| %-*s ", widths[1], "Vegetarian");
+    printf("| %-*s |\n", widths[2], "cal");
+    print_separator(separator_width);
+    for (int i = 0; i < menu_count; i++) {
+        printf("| %-*s ", widths[0], menus[i].day_of_week);
 
-        snprintf(str, sizeof(str), "%d.%d.%d", ementa[i].dia, ementa[i].mes, ementa[i].ano);
-        printf("| %*s ", spc[0], str);
+        snprintf(buffer, sizeof(buffer), "%d.%d.%d", menus[i].day,
+                 menus[i].month, menus[i].year);
+        printf("| %*s ", widths[0], buffer);
 
-        printf("| %-*s ", spc[1], ementa[i].peixe);
-        printf("| %*d ", spc[2], ementa[i].peixe_cal);
+        printf("| %-*s ", widths[1], menus[i].fish);
+        printf("| %*d ", widths[2], menus[i].fish_calories);
 
-        printf("| %-*s ", spc[1], ementa[i].carne);
-        printf("| %*d ", spc[2], ementa[i].carne_cal);
+        printf("| %-*s ", widths[1], menus[i].meat);
+        printf("| %*d ", widths[2], menus[i].meat_calories);
 
-        printf("| %-*s ", spc[1], ementa[i].dieta);
-        printf("| %*d ", spc[2], ementa[i].dieta_cal);
+        printf("| %-*s ", widths[1], menus[i].diet);
+        printf("| %*d ", widths[2], menus[i].diet_calories);
 
-        printf("| %-*s ", spc[1], ementa[i].vegetariano);
-        printf("| %*d |\n", spc[2], ementa[i].vegetariano_cal);
+        printf("| %-*s ", widths[1], menus[i].vegetarian);
+        printf("| %*d |\n", widths[2], menus[i].vegetarian_calories);
     }
-    sep(rep);
+    print_separator(separator_width);
 }

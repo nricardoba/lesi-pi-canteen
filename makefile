@@ -1,10 +1,10 @@
 all: run
 
-profunc.o: profunc.c profunc.h
-	gcc -c profunc.c
+helpers.o: helpers.c helpers.h
+	gcc -c helpers.c
 
-prog: main.c profunc.o
-	gcc main.c profunc.o -o prog
+prog: main.c helpers.o helpers.h
+	gcc main.c helpers.o -o prog
 
 run: prog
 	./prog

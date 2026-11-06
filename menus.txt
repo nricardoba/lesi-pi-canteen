@@ -1,0 +1,7 @@
+Monday;6.1.2025;salmon;100;filet mignon;100;chicken;100;risotto;100
+Tuesday;7.1.2025;cod;100;barbecue;100;soup;100;burger;100
+Wednesday;8.1.2025;ceviche;100;stroganoff;100;salad;100;curry;100
+Thursday;9.1.2025;fish stew;100;ragu;100;wrap;100;pie;100
+Friday;10.1.2025;hake;100;steak;100;smoothie;100;spaghetti;100
+Saturday;11.1.2025;tilapia;100;meatballs;100;tilapia;100;shakshuka;100
+Sunday;12.1.2025;tartare;100;sun-dried beef;100;omelet;100;pancake;100
