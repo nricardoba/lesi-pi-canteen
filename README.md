@@ -43,4 +43,4 @@ make
 
 ## Academic Context
 
-Developed for the **Object-Oriented Programming** course, with a final grade of **19 out of 20**.
+Developed for the **Imperative Programming** course, with a final grade of **19 out of 20**.
