@@ -2,7 +2,7 @@
 
 ## Description
 
-This project, developed for the Imperative Programming course at IPCA, is a C application for managing cafeteria operations including employees, weekly menus, and meal tickets. It provides a terminal-based interactive interface for creating, listing, and persisting data across sessions using text files.
+This project, developed for the Imperative Programming course at UPCA, is a C application for managing cafeteria operations including employees, weekly menus, and meal tickets. It provides a terminal-based interactive interface for creating, listing, and persisting data across sessions using text files.
 
 **Final grade: 19/20.**
 
