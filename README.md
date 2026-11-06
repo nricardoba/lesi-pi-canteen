@@ -4,6 +4,8 @@
 
 This project, developed for the Imperative Programming course at IPCA, is a C application for managing cafeteria operations including employees, weekly menus, and meal tickets. It provides a terminal-based interactive interface for creating, listing, and persisting data across sessions using text files.
 
+**Final grade: 19/20.**
+
 ## Features
 
 - **Employee Management:** Add new employees (with ID, name, tax ID, and phone number), list all employees in a formatted table, and check for duplicate IDs.
@@ -39,6 +41,6 @@ To build and run the project, use the provided `makefile`:
 make
 ```
 
-## Grade
+## Academic Context
 
-This project received a grade of **19 out of 20**.
+Developed for the **Object-Oriented Programming** course, with a final grade of **19 out of 20**.
